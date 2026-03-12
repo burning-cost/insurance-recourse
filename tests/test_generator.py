@@ -328,7 +328,10 @@ class TestBuildAction:
     def test_build_action_no_changes(self):
         gen = self._make_gen()
         factual = _make_factual()
-        action = gen._build_action(factual, factual.copy(), current_premium=1200.0)
+        # Use the model's own prediction so current_premium matches predicted_premium
+        factual_df = factual.to_frame().T.reset_index(drop=True)
+        actual_current = float(gen._predict_fn(factual_df)[0])
+        action = gen._build_action(factual, factual.copy(), current_premium=actual_current)
         assert action.feature_changes == {}
         assert action.premium_reduction == pytest.approx(0.0, abs=0.01)
 
