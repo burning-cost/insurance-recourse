@@ -186,6 +186,11 @@ The `alibi_cfrl` backend trains an RL agent, which is expensive. Use it only whe
 
 The FOCUS backend implements the sigmoid approximation from scratch using sklearn's `tree_` attribute. It requires the model to expose tree internals via the sklearn API. For models that don't (arbitrary callable predict functions), fall back to `backend="dice"`.
 
+## Performance
+
+No formal benchmark yet. This library is about compliance and explanation quality, not predictive performance. The value is in the output format — insurance-native constraints (immutable features, direction-constrained changes, monetary costs), FCA-audit JSON with SHA-256 hash, and premium-denominated savings. The counterfactual search quality depends entirely on your underlying pricing model: a well-calibrated GBM will produce realistic action costs; a poorly calibrated model will produce counterfactuals that look implausible to underwriters. The FOCUS backend (for tree ensembles) is the fastest option, running in seconds per policyholder. The DiCE backend takes 1-10 seconds per policyholder depending on search complexity. The alibi CFRL backend requires RL training (minutes) and is only worth it when FOCUS and DiCE cannot find feasible counterfactuals.
+
+
 ## Licence
 
 MIT
